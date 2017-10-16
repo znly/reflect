@@ -2383,7 +2383,7 @@ func isValidFieldName(fieldName string) bool {
 //
 // StructOf currently does not generate wrapper methods for embedded fields.
 // This limitation may be lifted in a future version.
-func StructOf(fields []StructField) Type {
+func StructOf(structName string, fields []StructField) Type {
 	var (
 		hash       = fnv1(0, []byte("struct {")...)
 		size       uintptr
@@ -2690,7 +2690,7 @@ func StructOf(fields []StructField) Type {
 		}
 	}
 
-	typ.str = resolveReflectName(newName(str, "", "", false))
+	typ.str = resolveReflectName(newName(structName, "", "", false))
 	typ.tflag = 0
 	typ.hash = hash
 	typ.size = size
