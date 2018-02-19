@@ -2082,7 +2082,10 @@ func Select(cases []SelectCase) (chosen int, recv Value, recvOK bool) {
  */
 
 // implemented in package runtime
+//go:linkname unsafe_New reflect.unsafe_New
 func unsafe_New(*rtype) unsafe.Pointer
+
+//go:linkname unsafe_NewArray reflect.unsafe_NewArray
 func unsafe_NewArray(*rtype, int) unsafe.Pointer
 
 // MakeSlice creates a new zero-initialized slice value
@@ -2512,8 +2515,13 @@ func cvtI2I(v Value, typ Type) Value {
 }
 
 // implemented in ../runtime
+//go:linkname chancap reflect.chancap
 func chancap(ch unsafe.Pointer) int
+
+//go:linkname chanclose reflect.chanclose
 func chanclose(ch unsafe.Pointer)
+
+//go:linkname chanlen reflect.chanlen
 func chanlen(ch unsafe.Pointer) int
 
 // Note: some of the noescape annotations below are technically a lie,
@@ -2525,35 +2533,47 @@ func chanlen(ch unsafe.Pointer) int
 // (due to the escapes() call in ValueOf).
 
 //go:noescape
+//go:linkname chanrecv reflect.chanrecv
 func chanrecv(ch unsafe.Pointer, nb bool, val unsafe.Pointer) (selected, received bool)
 
 //go:noescape
+//go:linkname chansend reflect.chansend
 func chansend(ch unsafe.Pointer, val unsafe.Pointer, nb bool) bool
 
+//go:linkname makechan reflect.makechan
 func makechan(typ *rtype, size int) (ch unsafe.Pointer)
+
+//go:linkname makemap reflect.makemap
 func makemap(t *rtype, cap int) (m unsafe.Pointer)
 
 //go:noescape
+//go:linkname mapaccess reflect.mapaccess
 func mapaccess(t *rtype, m unsafe.Pointer, key unsafe.Pointer) (val unsafe.Pointer)
 
 //go:noescape
+//go:linkname mapassign reflect.mapassign
 func mapassign(t *rtype, m unsafe.Pointer, key, val unsafe.Pointer)
 
 //go:noescape
+//go:linkname mapdelete reflect.mapdelete
 func mapdelete(t *rtype, m unsafe.Pointer, key unsafe.Pointer)
 
 // m escapes into the return value, but the caller of mapiterinit
 // doesn't let the return value escape.
 //go:noescape
+//go:linkname mapiterinit reflect.mapiterinit
 func mapiterinit(t *rtype, m unsafe.Pointer) unsafe.Pointer
 
 //go:noescape
+//go:linkname mapiterkey reflect.mapiterkey
 func mapiterkey(it unsafe.Pointer) (key unsafe.Pointer)
 
 //go:noescape
+//go:linkname mapiternext reflect.mapiternext
 func mapiternext(it unsafe.Pointer)
 
 //go:noescape
+//go:linkname maplen reflect.maplen
 func maplen(m unsafe.Pointer) int
 
 // call calls fn with a copy of the n argument bytes pointed at by arg.
@@ -2561,25 +2581,31 @@ func maplen(m unsafe.Pointer) int
 // back into arg+retoffset before returning. If copying result bytes back,
 // the caller must pass the argument frame type as argtype, so that
 // call can execute appropriate write barriers during the copy.
+//go:linkname call reflect.call
 func call(argtype *rtype, fn, arg unsafe.Pointer, n uint32, retoffset uint32)
 
+//go:linkname ifaceE2I reflect.ifaceE2I
 func ifaceE2I(t *rtype, src interface{}, dst unsafe.Pointer)
 
 // typedmemmove copies a value of type t to dst from src.
 //go:noescape
+//go:linkname typedmemmove reflect.typedmemmove
 func typedmemmove(t *rtype, dst, src unsafe.Pointer)
 
 // typedmemmovepartial is like typedmemmove but assumes that
 // dst and src point off bytes into the value and only copies size bytes.
 //go:noescape
+//go:linkname typedmemmovepartial reflect.typedmemmovepartial
 func typedmemmovepartial(t *rtype, dst, src unsafe.Pointer, off, size uintptr)
 
 // typedslicecopy copies a slice of elemType values from src to dst,
 // returning the number of elements copied.
 //go:noescape
+//go:linkname typedslicecopy reflect.typedslicecopy
 func typedslicecopy(elemType *rtype, dst, src sliceHeader) int
 
 //go:noescape
+//go:linkname memclrNoHeapPointers reflect.memclrNoHeapPointers
 func memclrNoHeapPointers(ptr unsafe.Pointer, n uintptr)
 
 // Dummy annotation marking that the value x escapes,

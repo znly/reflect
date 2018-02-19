@@ -642,21 +642,25 @@ func (t *uncommonType) methods() []method {
 // resolveNameOff resolves a name offset from a base pointer.
 // The (*rtype).nameOff method is a convenience wrapper for this function.
 // Implemented in the runtime package.
+//go:linkname resolveNameOff reflect.resolveNameOff
 func resolveNameOff(ptrInModule unsafe.Pointer, off int32) unsafe.Pointer
 
 // resolveTypeOff resolves an *rtype offset from a base type.
 // The (*rtype).typeOff method is a convenience wrapper for this function.
 // Implemented in the runtime package.
+//go:linkname resolveTypeOff reflect.resolveTypeOff
 func resolveTypeOff(rtype unsafe.Pointer, off int32) unsafe.Pointer
 
 // resolveTextOff resolves an function pointer offset from a base type.
 // The (*rtype).textOff method is a convenience wrapper for this function.
 // Implemented in the runtime package.
+//go:linkname resolveTextOff reflect.resolveTextOff
 func resolveTextOff(rtype unsafe.Pointer, off int32) unsafe.Pointer
 
 // addReflectOff adds a pointer to the reflection lookup map in the runtime.
 // It returns a new ID that can be used as a typeOff or textOff, and will
 // be resolved correctly. Implemented in the runtime package.
+//go:linkname addReflectOff reflect.addReflectOff
 func addReflectOff(ptr unsafe.Pointer) int32
 
 // resolveReflectType adds a name to the reflection lookup map in the runtime.
@@ -1737,6 +1741,7 @@ func haveIdenticalUnderlyingType(T, V *rtype, cmpTags bool) bool {
 // there can be more than one with a given string.
 // Only types we might want to look up are included:
 // pointers, channels, maps, slices, and arrays.
+//go:linkname typelinks reflect.typelinks
 func typelinks() (sections []unsafe.Pointer, offset [][]int32)
 
 func rtypeOff(section unsafe.Pointer, off int32) *rtype {
@@ -1860,6 +1865,7 @@ func ChanOf(dir ChanDir, t Type) Type {
 	return ti.(Type)
 }
 
+//go:linkname ismapkey reflect.ismapkey
 func ismapkey(*rtype) bool // implemented in runtime
 
 // MapOf returns the map type with the given key and element types.
